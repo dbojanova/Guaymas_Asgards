@@ -2,8 +2,6 @@
 
 ## Separate MAGs into Loki and Heimdall folders based on gtdbtk results
 
-#!/usr/bin/env Rscript
-
 library(readr)
 library(stringr)
 library(dplyr)
@@ -33,10 +31,9 @@ separate_mags <- function(mag_folder, gtdbtk_file){
       mag_name <- gtdbtk_results[[1]][i]
       target_folder <- gtdbtk_results$class[i]
       
-      original_file <- file.path(mag_folder, paste0(mag_name, ".fa"))
+      original_file <- file.path(mag_folder, paste0(mag_name, ".faa"))
       
-      file.copy(original_file, file.path(target_folder, paste0(mag_name, ".fa")))
-      cat("Added", mag_name, "to", target_folder, "folder\n")
+      file.copy(original_file, file.path(target_folder, paste0(mag_name, ".faa")))
     }
     
     # Print summary
