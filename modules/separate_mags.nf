@@ -2,8 +2,8 @@ process separate_mags {
     label 'r_script'
 
     input:
-    path mags
-    path gtdbtk_results
+    path "mags/"
+    path "gtdbtk.tsv"
 
     output:
     path 'loki/*', emit: loki
@@ -11,6 +11,6 @@ process separate_mags {
 
     script:
     """
-    parse_loki_heim.R ${mags} ${gtdbtk_results}
+    Rscript ${projectDir}/bin/parse_loki_heim.R mags gtdbtk.tsv
     """
 }
