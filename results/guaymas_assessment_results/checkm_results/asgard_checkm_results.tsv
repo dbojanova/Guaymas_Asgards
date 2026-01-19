@@ -1,0 +1,6 @@
+Bin Id	Marker lineage	# genomes	# markers	# marker sets	0	1	2	3	4	5+	Completeness	Contamination	Strain heterogeneity
+U1545B_2H_Loki	k__Archaea (UID2)	207	149	107	49	96	4	0	0	0	68.51	2.80	0.00
+U1546D_4H_Heimdall_1	k__Archaea (UID2)	207	149	107	41	107	1	0	0	0	71.60	0.93	0.00
+U1546D_4H_Heimdall_2	k__Archaea (UID2)	207	149	107	32	112	5	0	0	0	75.71	3.27	20.00
+U1547B_2H_Loki	k__Archaea (UID2)	207	149	107	30	113	6	0	0	0	77.73	4.21	0.00
+U1547B_3H_Loki	k__Archaea (UID2)	207	149	107	28	116	5	0	0	0	78.52	3.27	0.00
