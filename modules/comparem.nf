@@ -1,6 +1,6 @@
 process comparem{
     input:
-    path 'faa/*'
+    path 'mags/*'
 
     output:
     path 'results/aai/*'
@@ -9,6 +9,6 @@ process comparem{
 
     script:
     """
-    comparem aai_wf --genomes faa --file_ext faa --outdir results --cpus ${task.cpus} --proteins
+    comparem aai_wf mags results --file_ext faa --cpus ${task.cpus} --proteins
     """
 }
