@@ -5,6 +5,7 @@ process gtdbtk {
 
     output:
     path 'gtdbtk.ar53.summary.tsv'
+    path 'gtdbtk.bac120.summary.tsv'
 
     publishDir "${params.output_assessment}/gtdbtk_results",pattern:'gtdbtk.ar53.summary.tsv', mode: 'copy'
 

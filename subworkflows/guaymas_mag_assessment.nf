@@ -18,5 +18,5 @@ workflow guaymas_mag_assessment{
     // renamed_mags_ch = rename_mags(gtdbtk.out,guaymas_mags_ch)
 
     // check genome quality
-    checkm(guaymas_mags_ch)
+    //checkm(guaymas_mags_ch)
 }

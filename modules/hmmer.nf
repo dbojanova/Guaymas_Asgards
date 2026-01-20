@@ -79,7 +79,7 @@ process hmmer_search_pfam {
         # Search with HMMER
         hmmsearch \
             --domtblout results/\${base}_domain_hits.tsv \
-            --cut_ga \
+            --cut_tc \
             --cpu 4 \
             ${hmm} \
             \$mag > /dev/null
@@ -112,49 +112,35 @@ process hmmer_search_pfam {
 }   
 
 process combine_presence_absence {
+    label 'r_script'
     
     input:
-    path ko_public
-    path ko_guaymas
-    path pfam_public
-    path pfam_guaymas
+    path 'ko.tsv' 
+    path 'pfam.tsv'
+    val source
     
     output:
-    path "nmo_combined_presence_absence.tsv"
+    path "${source}_nmo_combined_presence_absence.tsv"
 
-    publishDir "${params.output_dir}/hmmer_results", mode: 'copy'
+    publishDir "${params.output_annotation}/hmmer_results", mode: 'copy'
     
     script:
     """
-    #!/usr/bin/env python3
-    import pandas as pd
+    #!/usr/bin/env Rscript
     
-    # Read all matrices
-    ko_pub = pd.read_csv("${ko_public}", sep="\t")
-    ko_guy = pd.read_csv("${ko_guaymas}", sep="\t")
-    pfam_pub = pd.read_csv("${pfam_public}", sep="\t")
-    pfam_guy = pd.read_csv("${pfam_guaymas}", sep="\t")
+    library(readr)
+    library(dplyr)
     
-    # Standardize column names (all use same gene names)
-    ko_pub.columns = ["MAG", "K00459"]
-    ko_guy.columns = ["MAG", "K00459"]
-    pfam_pub.columns = ["MAG", "PF03060"]
-    pfam_guy.columns = ["MAG", "PF03060"]
+    ko<- read_tsv("ko.tsv", col_types = "ci")
+    pfam <- read_tsv("pfam.tsv", col_types = "ci")
     
-    # Combine public and guaymas for each gene
-    ko_combined = pd.concat([ko_pub, ko_guy], ignore_index=True)
-    pfam_combined = pd.concat([pfam_pub, pfam_guy], ignore_index=True)
+    colnames(ko) <- c("MAG", "K00459")
+    colnames(pfam) <- c("MAG", "PF03060")
     
-    # Merge on MAG
-    combined = ko_combined.merge(pfam_combined, on="MAG", how="outer")
+    combined <- full_join(ko, pfam, by = "MAG") %>%
+        replace(is.na(.), 0) %>%
+        arrange(MAG)
     
-    # Fill NAs with 0
-    combined = combined.fillna(0).astype({"K00459": int, "PF03060": int})
-    
-    # Sort by MAG name
-    combined = combined.sort_values("MAG")
-    
-    # Save
-    combined.to_csv("nmo_combined_presence_absence.tsv", sep="\t", index=False)
+    write_tsv(combined, "${source}_nmo_combined_presence_absence.tsv")
     """
 }

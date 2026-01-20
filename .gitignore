@@ -2,3 +2,5 @@ work/
 .nextflow*
 mnt
 public_mags/
+guaymas_mags/
+results/asgard_annotation_results/*
