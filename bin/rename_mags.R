@@ -18,27 +18,21 @@ rename_mags <- function(mag_folder, gtdbtk_file){
     # save original names
     original_names <- gtdbtk_results[[1]]
 
-    # remove everything after second _ of mag name
-    prefix <- original_names %>%
-        str_replace("^([^_]+_[^_]+)_.*", "\\1")
-
-    # extract class level
+    # extract class level (full name)
     asgard_class <- gtdbtk_results[[2]] %>%
         str_extract("c__[^;]+") %>%
-        str_remove("c__") %>%
-        str_replace("Lokiarchaeia", "Loki") %>% 
-        str_replace("Heimdallarchaeia", "Heimdall")
+        str_remove("c__")
 
+    # combine new names: class_originalname
+    new_names <- paste(asgard_class, original_names, sep = "_")
 
-    # combine new names
-    new_names <- paste(prefix, asgard_class, sep = "_")
-
-    # rename files
+    # rename files and put in new folder
+    dir.create("renamed_mags", showWarnings = FALSE)
+    
     for(i in 1:length(original_names)) {
-      file.rename(
-        file.path(mag_folder, paste0(original_names[i], ".fa")),
-        file.path(mag_folder, paste0(new_names[i], ".fa"))
-      )
+        og_file <- file.path(mag_folder, paste0(original_names[i], ".faa"))
+        renamed_file <- file.path("renamed_mags", paste0(new_names[i], ".faa"))
+        file.copy(og_file, renamed_file)
     }
 }
 
