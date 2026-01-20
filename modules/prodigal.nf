@@ -22,6 +22,9 @@ process prodigal {
         base=\$(basename \$mag)
         prodigal -i \$mag -a faa/\${base%.fa}.faa -d fna/\${base%.fa}.fna -o gbk/\${base%.fa}.gbk -f gbk -p meta
 
+        # add mag name as a prefix to each header
+        sed -i "s/^>/>\${base%.fa}_/" "faa/\${base%.fa}.faa"
+
         # clean up headers and remove trailing asterisks
         sed -i '/^>/ s/ .*//' "faa/\${base%.fa}.faa"
         sed -i 's/\\*\$//' "faa/\${base%.fa}.faa"
